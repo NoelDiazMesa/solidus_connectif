@@ -1,0 +1,24 @@
+<div class="cn_product_visited" style="display:none">
+    <span class="url"><%= "https://#{Spree::Store.default.url.split('/').last}/products/#{@product.slug}" %></span>
+    <span class="product_id"><%= @product.sku %></span>
+    <span class="name"><%= @product.name %></span>
+    <span class="description"><%= strip_tags(@product.description) %></span>
+    <span class="image_url"><%= @product.images.present? ? @product.images.first.attachment.url(:original) : '' %></span>
+    <span class="unit_price"><%= @product.price %></span>
+    <span class="availability">
+        <%= (@product.master.can_supply? || @product.variants.any?{|v| v.can_supply? == true}) ? 'InStock' : 'OutOfStock' %>
+    </span>
+    <% if @product.taxon_ids.present? %>
+        <% @product.taxon_ids.each do |id| %>
+            <span class="category">
+                <%= seo_url(Spree::Taxon.find_by(id: id)) %>
+            </span>
+        <% end %>
+    <% end %>
+    <span class="thumbnail_url"><%= @product.images.present? ? @product.images.first.attachment.url(:small) : '' %></span>
+    <% if @related %>
+        <% @related.each do |product| %>
+            <span class="related_external_product_id"><%= product.sku %></span>
+        <% end %>
+    <% end %>
+</div>

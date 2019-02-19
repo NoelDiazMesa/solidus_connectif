@@ -1,0 +1,13 @@
+<%# Show only one time after login in home %>
+<% if flash[:success] == Spree.t(:logged_in_succesfully) %>
+	<div class="cn_login" style="display:none"></div>
+<% end %>
+<%# After event success %>
+<% if flash[:notice] == Spree.t(:signed_up) %> 
+	<div class="cn_register" style="display:none"></div>
+	<% if spree_current_user.respond_to?(:newsletter_subscribe) && spree_current_user.newsletter_subscribe.present? %> 
+		<div class="cn_newsletter_subscribe" style="display:none">
+		    <span class="email"><%= spree_current_user.email %></span>
+		</div>
+	<% end %>
+<% end %>

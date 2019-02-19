@@ -1,0 +1,36 @@
+<%# Insert in all views %>
+<% if (current_order && !current_order.line_items.empty?) %>
+    <div class="cn_cart" style="display:none">
+        <span class="cart_id"><%= current_order.number %></span>
+        <span class="total_quantity"><%= current_order.line_items.inject(0){|sum,x| sum + x.quantity} %></span>
+        <span class="total_price"><%= current_order.total.to_f %></span>
+        <% current_order.line_items.each do |item| %>
+            <div class="product_basket_item">
+                <span class="quantity"><%= item.quantity %></span>
+                <span class="price"><%= item.total.to_f %></span>
+                <span class="url"><%= "https://#{Spree::Store.default.url.split('/').last}/products/#{item.variant.product.slug}" %></span>
+                <span class="product_id"><%= item.variant.product.sku %></span>
+                <span class="name"><%= item.variant.product.name %></span>
+                <span class="description"><%= strip_tags(item.variant.product.description) %></span>
+                <span class="image_url"><%= item.variant.product.images.present? ? item.variant.product.images.first.attachment.url(:original) : '' %></span>
+                <span class="unit_price"><%= item.price.to_f %></span>
+                <span class="availability">
+                    <%= (item.variant.product.master.can_supply? || item.variant.product.variants.any?{|v| v.can_supply? == true}) ? 'InStock' : 'OutOfStock' %>
+                </span>
+                <% if item.variant.product.taxon_ids.present? %>
+                    <% item.variant.product.taxon_ids.each do |id| %>
+                        <span class="category">
+                        <%= seo_url(Spree::Taxon.find_by(id: id)) %>
+                        </span>
+                    <% end %>
+                <% end %>
+                <% unless item.variant.option_values.empty? %>
+                    <% item.variant.option_values.each do |option| %>
+                        <span class="tag"><%= option.presentation  %></span>
+                    <% end %>
+                <% end %>
+                <span class="thumbnail_url"><%= item.variant.product.images.present? ? item.variant.product.images.first.attachment.url(:small) : '' %></span>
+            </div>
+        <% end %> 
+    </div>
+<% end %>

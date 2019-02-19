@@ -1,0 +1,25 @@
+<% if spree_current_user.present? %>
+	<div class="cn_client_info" style="display:none">
+	    <span class="tracker_id"></span>
+	    <span class="primary_key"><%= spree_current_user.email %></span>
+	    <% if spree_current_user.ship_address.present? %>
+		    <span class="_name">
+		    	<%= spree_current_user.ship_address.firstname.present? ? spree_current_user.ship_address.firstname : '' %>
+		    </span>
+		    <span class="_surname">
+				<%= spree_current_user.ship_address.lastname.present? ? spree_current_user.ship_address.lastname : '' %>
+		    </span>
+		<% end %>
+	    <span class="_newsletter_subscription_status">
+	    	<%= spree_current_user.respond_to?(:newsletter) && spree_current_user.newsletter ? 'subscribed' : 'unsubscribed' %>
+	    </span>
+	</div>
+<% else %>
+	<div class="cn_client_info" style="display:none">
+	    <span class="tracker_id"></span>
+	    <span class="primary_key"></span>
+	    <span class="_name"></span>
+	    <span class="_surname"></span>
+	    <span class="_newsletter_subscription_status"></span>
+	</div>
+<% end %>
